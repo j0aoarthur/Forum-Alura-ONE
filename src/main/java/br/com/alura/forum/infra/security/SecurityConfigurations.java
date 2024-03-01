@@ -28,6 +28,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(request -> {
                     request.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     request.requestMatchers(HttpMethod.POST, "/cadastro").permitAll();
+                    request.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                     request.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
