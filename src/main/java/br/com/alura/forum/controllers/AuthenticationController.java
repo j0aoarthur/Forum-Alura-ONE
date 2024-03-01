@@ -2,6 +2,7 @@ package br.com.alura.forum.controllers;
 
 import br.com.alura.forum.infra.security.TokenDTO;
 import br.com.alura.forum.infra.security.TokenService;
+import br.com.alura.forum.usuarios.AuthenticationService;
 import br.com.alura.forum.usuarios.Usuario;
 import br.com.alura.forum.usuarios.UsuarioDadosDTO;
 import br.com.alura.forum.usuarios.UsuarioRepository;
@@ -24,10 +25,7 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private AuthenticationService authenticationService;
 
     @PostMapping("/login")
     public ResponseEntity fazerLogin(@RequestBody UsuarioDadosDTO usuarioLoginDTO) {
@@ -41,8 +39,7 @@ public class AuthenticationController {
 
     @PostMapping("/cadastro")
     public ResponseEntity cadastrarUsuario(@RequestBody UsuarioDadosDTO usuarioDadosDTO) {
-        var usuario = new Usuario(usuarioDadosDTO.login(), passwordEncoder.encode(usuarioDadosDTO.senha()));
-        usuarioRepository.save(usuario);
+        authenticationService.registerUser(usuarioDadosDTO);
 
         return fazerLogin(usuarioDadosDTO);
     }
